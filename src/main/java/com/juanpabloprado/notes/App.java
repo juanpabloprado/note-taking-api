@@ -2,8 +2,14 @@ package com.juanpabloprado.notes;
 
 import com.hubspot.jackson.jaxrs.PropertyFilteringMessageBodyWriter;
 import com.hubspot.rosetta.jdbi.RosettaMapperFactory;
+import com.juanpabloprado.notes.auth.NotesAuthenticator;
+import com.juanpabloprado.notes.representations.User;
 import com.juanpabloprado.notes.resources.NoteResource;
+import com.juanpabloprado.notes.resources.TokenResource;
+import com.juanpabloprado.notes.resources.UserResource;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.oauth.OAuthFactory;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.flyway.FlywayBundle;
 import io.dropwizard.jdbi.DBIFactory;
@@ -29,13 +35,19 @@ public class App extends Application<NotesConfiguration>
     @Override
     public void run(NotesConfiguration configuration, Environment environment) throws Exception {
         configureCors(environment);
+
         environment.jersey().register(new PropertyFilteringMessageBodyWriter());
 
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
         jdbi.registerMapper(new RosettaMapperFactory());
 
+        environment.jersey().register(AuthFactory.binder(new OAuthFactory<Boolean>(new NotesAuthenticator(jdbi),
+                "SUPER SECRET STUFF",
+                Boolean.class)));
         environment.jersey().register(new NoteResource(jdbi));
+        environment.jersey().register(new UserResource(jdbi));
+        environment.jersey().register(new TokenResource(jdbi));
     }
 
     @Override
