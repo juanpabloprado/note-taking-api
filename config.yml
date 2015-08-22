@@ -1,0 +1,5 @@
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: notesuser
+  password: notespassword
+  url: jdbc:mysql://localhost/dropwizard_notes
