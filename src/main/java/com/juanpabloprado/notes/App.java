@@ -42,9 +42,9 @@ public class App extends Application<NotesConfiguration>
         final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
         jdbi.registerMapper(new RosettaMapperFactory());
 
-        environment.jersey().register(AuthFactory.binder(new OAuthFactory<Boolean>(new NotesAuthenticator(jdbi),
+        environment.jersey().register(AuthFactory.binder(new OAuthFactory<User>(new NotesAuthenticator(jdbi),
                 "SUPER SECRET STUFF",
-                Boolean.class)));
+                User.class)));
         environment.jersey().register(new NoteResource(jdbi));
         environment.jersey().register(new UserResource(jdbi));
         environment.jersey().register(new TokenResource(jdbi));
