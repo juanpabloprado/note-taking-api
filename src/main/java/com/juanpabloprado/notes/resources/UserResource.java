@@ -1,7 +1,6 @@
 package com.juanpabloprado.notes.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Optional;
 import com.hubspot.jackson.jaxrs.PropertyFiltering;
 import com.juanpabloprado.notes.dao.UserDAO;
 import com.juanpabloprado.notes.representations.User;
@@ -27,15 +26,15 @@ import java.util.List;
 public class UserResource extends GenericResource<User> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
-    private final UserDAO userDao;
+    private final UserDAO userDAO;
 
     public UserResource(DBI jdbi) {
-        userDao = jdbi.onDemand(UserDAO.class);
+        userDAO = jdbi.onDemand(UserDAO.class);
     }
 
     @GET
     public Response getUsers(){
-        List<User> users = userDao.getUsers();
+        List<User> users = userDAO.getUsers();
         return Response.ok(users).build();
     }
 
@@ -43,30 +42,31 @@ public class UserResource extends GenericResource<User> {
     @Path("/{username}")
     @PropertyFiltering
     public Response getUser(@PathParam("username") String username) {
-        Optional<User> userOptional = userDao.getUser(username);
-        User user = findSafely(userOptional, User.TAG);
+        User user = findSafely(userDAO.getUser(username), User.TAG);
         return Response.ok(user).build();
     }
+
+
 
     @POST
     public Response createUser(@Valid User user) throws JsonProcessingException, URISyntaxException {
         LoggerJsonObject.logObject(user, LOGGER);
-        userDao.createUser(user);
+        userDAO.createUser(user);
         return Response.created(new URI(user.getUsername())).entity(user).build();
     }
 
     @DELETE
     @Path("/{username}")
-    public Response deleteUser(@PathParam("username") String username, @Auth Boolean isAuthenticated) {
-        userDao.deleteUser(username);
+    public Response deleteUser(@PathParam("username") String username, @Auth User authenticatedUser) {
+        userDAO.deleteUser(username);
         return Response.noContent().build();
     }
 
     @POST
     @Path("/{username}")
-    public Response updateUser(@PathParam("username") String username, @Valid User user, @Auth Boolean isAuthenticated) throws JsonProcessingException {
+    public Response updateUser(@PathParam("username") String username, @Valid User user, @Auth User authenticatedUser) throws JsonProcessingException {
         LoggerJsonObject.logObject(user, LOGGER);
-        userDao.updateUser(username, user);
+        userDAO.updateUser(username, user);
         return Response.ok(user).build();
     }
 

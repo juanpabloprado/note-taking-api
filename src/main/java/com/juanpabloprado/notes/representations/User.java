@@ -1,5 +1,6 @@
 package com.juanpabloprado.notes.representations;
 
+import com.google.common.base.Objects;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -44,5 +45,20 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equal(username, user.username) &&
+                Objects.equal(password, user.password) &&
+                Objects.equal(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(username, password, email);
     }
 }

@@ -30,11 +30,11 @@ import java.util.UUID;
 public class TokenResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
-    private final UserDAO userDao;
+    private final UserDAO userDAO;
     private final TokenDAO tokenDAO;
 
     public TokenResource(DBI jdbi) {
-        userDao = jdbi.onDemand(UserDAO.class);
+        userDAO = jdbi.onDemand(UserDAO.class);
         tokenDAO = jdbi.onDemand(TokenDAO.class);
     }
 
@@ -42,7 +42,7 @@ public class TokenResource {
     @Transactional
     public Response createToken(@Valid User user) throws JsonProcessingException, URISyntaxException {
         LoggerJsonObject.logObject(user, LOGGER);
-        boolean validUser = (userDao.getUser(user) == 1);
+        boolean validUser = (userDAO.getUser(user) == 1);
          if (!validUser) {
              throw new WebApplicationException(Response.Status.NOT_FOUND);
         }

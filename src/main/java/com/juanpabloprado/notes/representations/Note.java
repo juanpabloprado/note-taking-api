@@ -11,30 +11,29 @@ import org.hibernate.validator.constraints.NotBlank;
 @RosettaNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 public class Note {
 
+    public static final String TAG = Note.class.getSimpleName();
+
     private int id;
 
     @NotBlank
     @Length(min = 2, max = 50)
     private final String title;
 
-    @NotBlank
     private final String content;
 
-    @NotBlank
-    @Length(min = 2, max = 20)
-    private final String username;
-
-    public Note(String title, String content, String username) {
+    public Note(String title, String content) {
         this.title = title;
         this.content = content;
-        this.username = username;
     }
 
     public Note() {
         id = 0;
         title = null;
         content = null;
-        username = null;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -43,9 +42,5 @@ public class Note {
 
     public String getContent() {
         return content;
-    }
-
-    public String getUsername() {
-        return username;
     }
 }
