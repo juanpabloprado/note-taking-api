@@ -1,12 +1,15 @@
 package com.juanpabloprado.notes.representations;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.base.Objects;
+import com.hubspot.rosetta.annotations.RosettaNaming;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by Juan on 8/21/2015.
  */
+@RosettaNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 public class User {
 
     public static final String TAG = User.class.getSimpleName();
