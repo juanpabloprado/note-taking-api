@@ -71,6 +71,29 @@ public class NoteResource extends GenericResource<Note> {
         return Response.status(Response.Status.FORBIDDEN).build();
     }
 
+    @POST
+    @Path("/{id}")
+    @Transactional
+    public Response updateNote(@PathParam("username") String username, @PathParam("id") int id, @Valid Note note, @Auth User authenticatedUser) throws JsonProcessingException, URISyntaxException {
+        LoggerJsonObject.logObject(note, LOGGER);
+        if (isValidUser(username, authenticatedUser)) {
+            noteDAO.updateNote(new Note(id, note.getTitle(), note.getContent()), username);
+            Note newNote = findSafely(noteDAO.getNote(id), Note.TAG);
+            return Response.ok(newNote).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteNote(@PathParam("username") String username, @PathParam("id") int id, @Auth User authenticatedUser) {
+        if (isValidUser(username, authenticatedUser)) {
+            noteDAO.deleteNote(id);
+            return Response.noContent().build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+
     private boolean isValidUser(@PathParam("username") String username, @Auth User authenticatedUser) {
         Optional<User> validUser = userDAO.getUser(username);
         if(validUser.isPresent()) {

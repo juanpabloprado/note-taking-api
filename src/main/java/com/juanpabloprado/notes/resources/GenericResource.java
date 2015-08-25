@@ -19,8 +19,7 @@ public abstract class GenericResource<E> {
         return optional.get();
     }
 
-    protected class Error
-    {
+    protected class Error {
         @JsonProperty
         public final String message;
 

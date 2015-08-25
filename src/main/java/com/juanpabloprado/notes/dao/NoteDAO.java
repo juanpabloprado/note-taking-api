@@ -20,10 +20,10 @@ public interface NoteDAO {
     int createNote(@BindWithRosetta Note note, @Bind("username") String username);
 
     @SqlUpdate("update note set title = :title, content = :content where id = :id and username = :username")
-    void updateNote(@Bind("id") int id, @BindWithRosetta Note note);
+    void updateNote(@BindWithRosetta Note note, @Bind("username") String username);
 
-    @SqlUpdate("delete from country where code = :code")
-    void deleteNote(@Bind("code") int id);
+    @SqlUpdate("delete from note where id = :id")
+    void deleteNote(@Bind("id") int id);
 
     @SqlQuery("select * from note where username = :username")
     List<Note> getNotes(@Bind("username") String username);

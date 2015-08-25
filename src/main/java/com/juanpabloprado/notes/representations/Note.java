@@ -13,7 +13,7 @@ public class Note {
 
     public static final String TAG = Note.class.getSimpleName();
 
-    private int id;
+    private final int id;
 
     @NotBlank
     @Length(min = 2, max = 50)
@@ -21,7 +21,8 @@ public class Note {
 
     private final String content;
 
-    public Note(String title, String content) {
+    public Note(int id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
     }
