@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS token (
 
   CONSTRAINT fk_token_user FOREIGN KEY (username)
   REFERENCES user (username)
+    ON UPDATE CASCADE
     ON DELETE CASCADE
 )
   ENGINE = InnoDB

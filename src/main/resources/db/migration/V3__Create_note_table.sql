@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS note (
 
   CONSTRAINT fk_note_user FOREIGN KEY (username)
   REFERENCES user (username)
+    ON UPDATE CASCADE
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
