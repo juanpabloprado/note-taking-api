@@ -18,8 +18,8 @@ public interface UserDAO {
     @SqlUpdate("insert into user (username, password, email) values ( :username, :password, :email)")
     void createUser(@BindWithRosetta User user);
 
-    @SqlUpdate("update user set username = :username, password = :password where username = :username")
-    void updateUser(@Bind("username") String username, @BindWithRosetta User user);
+    @SqlUpdate("update user set username = :username, password = :password, email = :email where username = :oldUsername")
+    void updateUser(@Bind("oldUsername") String username, @BindWithRosetta User user);
 
     @SqlUpdate("delete from user where username = :username")
     void deleteUser(@Bind("username") String username);
