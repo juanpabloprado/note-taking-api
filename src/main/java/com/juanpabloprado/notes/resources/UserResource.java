@@ -66,6 +66,9 @@ public class UserResource extends GenericResource<User> {
     @Path("/{username}")
     public Response updateUser(@PathParam("username") String username, @Valid User user, @Auth User authenticatedUser) throws JsonProcessingException {
         LoggerJsonObject.logObject(user, LOGGER);
+        if(user.getEmail() == null) {
+            user = new User(user.getUsername(), user.getPassword(), authenticatedUser.getEmail());
+        }
         userDAO.updateUser(username, user);
         return Response.ok(user).build();
     }
