@@ -22,9 +22,15 @@ public class User {
     @Length(min = 2, max = 50)
     private final String password;
 
-    @NotBlank
-    @Length(min = 2, max = 89)
+//    @NotBlank
+//    @Length(min = 2, max = 89)
     private final String email;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.email = null;
+    }
 
     public User(String username, String password, String email) {
         this.username = username;
