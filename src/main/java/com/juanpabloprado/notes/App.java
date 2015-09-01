@@ -5,9 +5,11 @@ import com.hubspot.rosetta.jdbi.RosettaMapperFactory;
 import com.juanpabloprado.notes.auth.NotesAuthenticator;
 import com.juanpabloprado.notes.representations.User;
 import com.juanpabloprado.notes.resources.NoteResource;
+import com.juanpabloprado.notes.resources.RedirectRootResource;
 import com.juanpabloprado.notes.resources.TokenResource;
 import com.juanpabloprado.notes.resources.UserResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.oauth.OAuthFactory;
 import io.dropwizard.db.DataSourceFactory;
@@ -15,6 +17,7 @@ import io.dropwizard.flyway.FlywayBundle;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.skife.jdbi.v2.DBI;
 
@@ -45,6 +48,7 @@ public class App extends Application<NotesConfiguration>
         environment.jersey().register(AuthFactory.binder(new OAuthFactory<User>(new NotesAuthenticator(jdbi),
                 "SUPER SECRET STUFF",
                 User.class)));
+        environment.jersey().register(new RedirectRootResource());
         environment.jersey().register(new NoteResource(jdbi));
         environment.jersey().register(new UserResource(jdbi));
         environment.jersey().register(new TokenResource(jdbi));
@@ -52,11 +56,16 @@ public class App extends Application<NotesConfiguration>
 
     @Override
     public void initialize(Bootstrap<NotesConfiguration> bootstrap) {
-        bootstrap.addBundle(new FlywayBundle<NotesConfiguration>() {
+        final AssetsBundle assetBundle = new AssetsBundle("/assets", "/app", "index.html");
+        final ViewBundle viewBundle = new ViewBundle();
+        final FlywayBundle<NotesConfiguration> flywayBundle = new FlywayBundle<NotesConfiguration>() {
             public DataSourceFactory getDataSourceFactory(NotesConfiguration configuration) {
                 return configuration.getDataSourceFactory();
             }
-        });
+        };
+        bootstrap.addBundle(assetBundle);
+        bootstrap.addBundle(viewBundle);
+        bootstrap.addBundle(flywayBundle);
     }
 
     private void configureCors(Environment environment) {
