@@ -5,7 +5,6 @@ import com.hubspot.rosetta.jdbi.RosettaMapperFactory;
 import com.juanpabloprado.notes.auth.NotesAuthenticator;
 import com.juanpabloprado.notes.representations.User;
 import com.juanpabloprado.notes.resources.NoteResource;
-import com.juanpabloprado.notes.resources.RedirectRootResource;
 import com.juanpabloprado.notes.resources.TokenResource;
 import com.juanpabloprado.notes.resources.UserResource;
 import io.dropwizard.Application;
@@ -48,7 +47,6 @@ public class App extends Application<NotesConfiguration>
         environment.jersey().register(AuthFactory.binder(new OAuthFactory<User>(new NotesAuthenticator(jdbi),
                 "SUPER SECRET STUFF",
                 User.class)));
-        environment.jersey().register(new RedirectRootResource());
         environment.jersey().register(new NoteResource(jdbi));
         environment.jersey().register(new UserResource(jdbi));
         environment.jersey().register(new TokenResource(jdbi));
@@ -56,7 +54,7 @@ public class App extends Application<NotesConfiguration>
 
     @Override
     public void initialize(Bootstrap<NotesConfiguration> bootstrap) {
-        final AssetsBundle assetBundle = new AssetsBundle("/assets", "/app", "index.html");
+        final AssetsBundle assetBundle = new AssetsBundle("/assets", "/", "index.html");
         final ViewBundle viewBundle = new ViewBundle();
         final FlywayBundle<NotesConfiguration> flywayBundle = new FlywayBundle<NotesConfiguration>() {
             public DataSourceFactory getDataSourceFactory(NotesConfiguration configuration) {

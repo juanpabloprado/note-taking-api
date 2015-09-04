@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Created by Juan on 8/22/2015.
  */
-@Path("/v1/tokens")
+@Path("/tokens")
 @Produces(MediaType.APPLICATION_JSON)
 public class TokenResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);

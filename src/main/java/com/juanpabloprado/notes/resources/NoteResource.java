@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by Juan on 8/21/2015.
  */
-@Path("/v1/users/{username}/notes")
+@Path("/users/{username}/notes")
 @Produces(MediaType.APPLICATION_JSON)
 public class NoteResource extends GenericResource<Note> {
 

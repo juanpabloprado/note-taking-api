@@ -3,3 +3,6 @@ database:
   user: notesuser
   password: notespassword
   url: jdbc:mysql://localhost/dropwizard_notes
+server:
+  rootPath: /v1/*
+  applicationContextPath: /

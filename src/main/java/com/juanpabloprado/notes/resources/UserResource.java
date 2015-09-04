@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Juan on 8/22/2015.
  */
-@Path("/v1/users")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource extends GenericResource<User> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
