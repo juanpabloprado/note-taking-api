@@ -1,8 +1,9 @@
 import React from 'react';
+import NoteListContainer from './NoteListContainer';
 
 class NotesApp extends React.Component {
     render() {
-        return <p>Hello, world!</p>;
+        return <NoteListContainer />;
     }
 }
 
