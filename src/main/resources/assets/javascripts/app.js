@@ -1,7 +1,8 @@
 // index.jsx
 
-import React from 'react';
+import 'whatwg-fetch';
 import NotesApp from './components/NotesApp';
+import React from 'react';
 
 React.render(
   <NotesApp />,
